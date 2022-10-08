@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Login extends javax.swing.JPanel {
-    
+
     public Login() {
         initComponents();
         init();
@@ -28,14 +28,14 @@ public class Login extends javax.swing.JPanel {
                         PublicEvent.getInstance().getEventMain().showLoading(true);
                         try {
                             Thread.sleep(1000); //  for test
-                            
+
                             Client client = ClientSocket.getInstanceClientSocket().getClient();
 //                            Message message = new Message(4,account, new MessageType(2, account));
-                            Message message = new Message(4,true, new MessageType(2, account));
+                            Message message = new Message(4, true, new MessageType(2, account));
                             client.reqMessage = message;
                             client.setUserAccount(account);
                             client.runRequestThread();
-
+                            PublicEvent.getInstance().getEventMain().showLoading(false);
                         } catch (InterruptedException e) {
                         } catch (IOException ex) {
                             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -46,8 +46,26 @@ public class Login extends javax.swing.JPanel {
             }
 
             @Override
-            public void register() {
-                System.out.println("Register");
+            public void register(Account account) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        PublicEvent.getInstance().getEventMain().showLoading(true);
+                        try {
+                            Thread.sleep(1000); //  for test
+
+                            Client client = ClientSocket.getInstanceClientSocket().getClient();
+                            Message message = new Message(4, false, new MessageType(2, account));
+                            client.reqMessage = message;
+                            client.runRequestThread();
+                            PublicEvent.getInstance().getEventMain().showLoading(false);
+                        } catch (InterruptedException e) {
+                        } catch (IOException ex) {
+                            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+                }).start();
             }
 
             @Override
@@ -87,7 +105,7 @@ public class Login extends javax.swing.JPanel {
 
         jLabel2.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(66, 66, 66));
-        jLabel2.setText("Chat Application");
+        jLabel2.setText("HUTECH");
 
         pic.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -98,7 +116,7 @@ public class Login extends javax.swing.JPanel {
             .addGroup(picLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(jLabel2)
-                .addContainerGap(576, Short.MAX_VALUE))
+                .addContainerGap(630, Short.MAX_VALUE))
         );
         picLayout.setVerticalGroup(
             picLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

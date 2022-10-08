@@ -1,4 +1,3 @@
-
 package main;
 
 import Class.Account;
@@ -38,16 +37,16 @@ public class Main extends javax.swing.JFrame {
         initEvent();
         initClient();
     }
-    
-    private void initClient(){
+
+    private void initClient() {
         Client client = new Client("127.0.0.1", 8081);
         client.runMainClient();
         ClientSocket.getInstanceClientSocket().setClient(client);
         client.loginForm = login;
     }
-    
-    private void initGroup(){
-        
+
+    private void initGroup() {
+
     }
 
     private void initEvent() {
@@ -74,7 +73,7 @@ public class Main extends javax.swing.JFrame {
 
             @Override
             public void selectGroup(GroupChat group) {
-               home.setGroup(group);
+                home.setGroup(group);
             }
 
             @Override
@@ -242,6 +241,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_titleMousePressed
 
     private void cmdCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCloseActionPerformed
+        PublicEvent.getInstance().getEventMenuRight().logout();
         System.exit(0);
     }//GEN-LAST:event_cmdCloseActionPerformed
 

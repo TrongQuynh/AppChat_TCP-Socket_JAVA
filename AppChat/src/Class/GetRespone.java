@@ -6,7 +6,7 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 import javax.swing.JOptionPane;
 
-public class GetRespone implements Runnable {
+public class GetRespone extends Thread {
 
     private Socket clientSocket;
     private Client client;
@@ -16,23 +16,24 @@ public class GetRespone implements Runnable {
         this.clientSocket = socket;
         this.client = client;
     }
-
+    
     @Override
     public void run() {
         try {
 
             resObject = new ObjectInputStream(clientSocket.getInputStream());
             while (true) {
+                System.out.println("New message from server");
                 Message resMessage = (Message) resObject.readObject();
                 int messageType = resMessage.getMessage().getMessageType();
                 if (!client.isLogin) {
                     if (messageType == 1) {
                         String result = resMessage.getMessage().getMessageText();
-                        if (result.equals("true")) {
+                        if (result.equalsIgnoreCase("true")) {
                             PublicEvent.getInstance().getEventLogin().goLogin();
                         } else {
 //                            PublicEvent.getInstance().getEventLogin().setNotifycation("Register Fail");
-                            JOptionPane.showMessageDialog(null, "Register fail", "Register", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this.client.loginForm, "Register fail", "Register", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
                         Account account = resMessage.getMessage().getAccount();
@@ -42,9 +43,10 @@ public class GetRespone implements Runnable {
                             PublicEvent.getInstance().getEventMain().initChat();
                             this.client.loginForm.setVisible(false);
                             System.out.println("Login Success");
-                            account.displayUserInfo();
+
                             client.setUserAccount(account);
                             client.isLogin = true;
+                            PublicEvent.getInstance().getEventMenuRight().setUser(account);
                         } else {
                             PublicEvent.getInstance().getEventMain().showLoading(false);
 
@@ -64,13 +66,16 @@ public class GetRespone implements Runnable {
                             Account account = resMessage.getMessage().getAccount();
                             AccountList accountList = ClientSocket.getInstanceClientSocket().getAccountList();
                             accountList.updateStatusAccount(account.getID(), true);
+                            System.out.println("Update new user connect: " + account.getID());
                             PublicEvent.getInstance().getEventMenuLeft().newUserConnect(account.getID());
                         } else if (messageType == 3) {
                             AccountList accountList = resMessage.getMessage().getAccountList();
                             ClientSocket.getInstanceClientSocket().setAccountList(accountList);
+                            System.out.println("get responr Account list messtype 3: " + accountList.getAccountList().size());
                             PublicEvent.getInstance().getEventMenuLeft().newUser(accountList);
                         } else if (messageType == 4) {
                             GroupChatList groupChatList = resMessage.getMessage().getGroupChatList();
+                            System.out.println("getrespone groupChatList messtype 4: " + groupChatList.getGroupChats().size());
                             ClientSocket.getInstanceClientSocket().setGroupChatList(groupChatList);
                         }
                     } else {
@@ -79,9 +84,27 @@ public class GetRespone implements Runnable {
                             1-UniCast:  1 to 1
                             2-Multicast: 1 to Group
                             3-Broadcast: 1 to All
+                            5-Logout
                          */
-                        System.out.println("Recei message at getrespone.java");
-                       PublicEvent.getInstance().getEventChat().receiveMessage(resMessage);
+
+                        if (resMessage.getAddressType() == 5) {
+
+                            if (resMessage.getMessage().getMessageType() == 2) {
+
+                                Account account = resMessage.getMessage().getAccount();
+                                AccountList accountList = ClientSocket.getInstanceClientSocket().getAccountList();
+                                accountList.updateStatusAccount(account.getID(), false);
+                                int userID = account.getID();
+                                System.out.println("Receiver the user log out: " + userID);
+                                PublicEvent.getInstance().getEventMenuLeft().userDisconnect(userID);
+//                                client.runResponeThread();
+//                                return;
+                            }
+                        }else{
+                            System.out.println("Recei message at getrespone.java");
+                        PublicEvent.getInstance().getEventChat().receiveMessage(resMessage);
+                        }
+                        
                     }
 
                 }

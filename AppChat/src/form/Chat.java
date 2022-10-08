@@ -5,13 +5,15 @@ import Class.Client;
 import Class.ClientSocket;
 import Class.GroupChat;
 import Class.Message;
+import DB.MessageStore;
 import Class.MessageType;
 import Components.Chat_Body;
 import Components.Chat_Bottom;
 import Components.Chat_Title;
+import DB.MessageDB;
 import Events.EventChat;
 import Events.PublicEvent;
-import java.awt.Image;
+import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,10 +23,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.activation.MimetypesFileTypeMap;
 import javax.swing.ImageIcon;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 public class Chat extends javax.swing.JPanel {
@@ -43,6 +46,7 @@ public class Chat extends javax.swing.JPanel {
         chatTitle = new Chat_Title();
         chatBody = new Chat_Body();
         chatBottom = new Chat_Bottom();
+        messageDB = new MessageDB();
         PublicEvent.getInstance().addEventChat(new EventChat() {
             @Override
             public void sendMessage(String text, Account receiver) {
@@ -53,6 +57,7 @@ public class Chat extends javax.swing.JPanel {
                 Account sender = client.getUserAccount();
                 try {
                     int currentAddressType = ClientSocket.getInstanceClientSocket().getCurrentAddressType();
+                    System.out.println("Current Address Type: " + currentAddressType);
                     if (currentAddressType == 1) {
                         // Send message to other user
 
@@ -73,7 +78,7 @@ public class Chat extends javax.swing.JPanel {
                     }
 
                 } catch (IOException ex) {
-                    Logger.getLogger(Chat.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
                 }
             }
 
@@ -84,15 +89,15 @@ public class Chat extends javax.swing.JPanel {
                 int messageType = data.getMessage().getMessageType();
                 try {
                     if (currentAddressType == 1) {
-                        if (chatTitle.getAccount().getID().equals(data.getSender().getID())) {
-                            if(messageType == 1 || messageType == 5){
+                        if (chatTitle.getAccount().getID() == data.getSender().getID()) {
+                            if (messageType == 1 || messageType == 5) {
                                 chatBody.addItemLeftWithProfile(data);
-                            }else{
+                            } else {
                                 String fileLength = data.getMessage().getFileLengh();
                                 String fileName = data.getMessage().getFilename();
                                 String senderName = data.getSender().getUsername();
                                 byte[] fileContent = data.getMessage().getFileContent();
-                                chatBody.addItemFile("", senderName, fileName, fileLength,fileContent);
+                                chatBody.addItemFile("", senderName, fileName, fileLength, fileContent);
                             }
                         }
                     } else if (currentAddressType == 2) {
@@ -104,6 +109,7 @@ public class Chat extends javax.swing.JPanel {
                         chatBody.addItemLeftWithProfile(data);
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -118,7 +124,7 @@ public class Chat extends javax.swing.JPanel {
                         // show message of sender
                         ImageIcon imageIcon = new ImageIcon(file.getAbsolutePath());
                         chatBody.addItemRight("", imageIcon);
-                       
+
                         BufferedImage bufferedImage = ImageIO.read(file);
                         String format = getFileExtension(file);
                         if (format == null) {
@@ -139,9 +145,8 @@ public class Chat extends javax.swing.JPanel {
                         // Put the contents of the file into the array of bytes
                         fileInputStream.read(bytesFile);
                         String fileLength = (double) file.length() / (1024 * 1024) + " MB";
-                        messageType = new MessageType(6,fileName, fileLength, bytesFile);
-                        
-                        
+                        messageType = new MessageType(6, fileName, fileLength, bytesFile);
+
                         // show message has send
                         chatBody.addItemFileRight("", fileName, fileLength, bytesFile);
                     } catch (Exception e) {
@@ -186,24 +191,25 @@ public class Chat extends javax.swing.JPanel {
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 int chooser = fileChooser.showDialog(null, "Save");
-                if(chooser == JFileChooser.APPROVE_OPTION){
-                  File fileDirectory = fileChooser.getSelectedFile();
-                  System.out.println("Chat.java Place save file: " + fileDirectory);  
-                  String filePath = fileDirectory.toString()+"\\"+filename;
+                if (chooser == JFileChooser.APPROVE_OPTION) {
+                    File fileDirectory = fileChooser.getSelectedFile();
+                    System.out.println("Chat.java Place save file: " + fileDirectory);
+                    String filePath = fileDirectory.toString() + "\\" + filename;
                     try {
                         System.out.println("cha.java filepath: " + filePath);
                         File newFile = new File(filePath);
                         OutputStream os = new FileOutputStream(newFile);
                         os.write(fileContent);
                         System.out.println("Save file sucessful");
+                        JOptionPane.showMessageDialog(chatBody, "Save File successful!", "Save File",
+                                JOptionPane.OK_OPTION, new ImageIcon("src/Icons/file.png"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-                
-                
+
             }
-                      
+
         });
         add(chatTitle, "wrap");
         add(chatBody, "wrap");
@@ -232,18 +238,74 @@ public class Chat extends javax.swing.JPanel {
         return null;
     }
 
-    public void setUser(Account account) {
-        if(account.isSameAccount(chatTitle.getAccount())) return;
-        chatTitle.setUserName(account);
-        chatBottom.setUser(account);
+    private MessageDB messageDB;
+
+    public void setUser(Account currentAccount) {
+        chatTitle.setUserName(currentAccount);
+        chatBottom.setUser(currentAccount);
         chatBody.clearChat();
+        return;
+        /*
+        Account preAccount = chatTitle.getAccount();
+        JPanel bodyPanel = chatBody.getMessageData();
+
+        if (currentAccount.isSameAccount(preAccount)) {
+            return;
+        }
+        if (preAccount == null) {
+            System.out.println("Preaccount is null");
+            show_hidenMessageCurrentAccount(currentAccount);
+        } else {
+            MessageStore messageData = messageDB.findMessageAccountByID(preAccount.getID());
+            if (messageData == null && bodyPanel != null) {
+                messageDB.addNewMessageAccount(new MessageStore(preAccount.getID(), bodyPanel));
+
+            } else {
+                if (bodyPanel != null) {
+
+                    messageDB.UpdateMessageDataAccount(new MessageStore(preAccount.getID(), bodyPanel));
+
+                } else {
+                    System.out.println("Jpanel is null");
+
+                }
+            }
+            show_hidenMessageCurrentAccount(currentAccount);
+        }
+         */
+    }
+
+    private void show_hidenMessageCurrentAccount(Account currentAccount) {
+
+        MessageStore messageData = messageDB.findMessageAccountByID(currentAccount.getID());
+        if (messageData == null) {
+
+            chatTitle.setUserName(currentAccount);
+            chatBottom.setUser(currentAccount);
+            chatBody.clearChat();
+        } else {
+            //Show old message
+
+            chatTitle.setUserName(currentAccount);
+
+            chatBody.setMessageDataPanel(messageData.getMessagePanel());
+        }
     }
 
     public void setGroup(GroupChat groupChat) {
-        groupChat.displayInfo();
+        if (chatTitle.getGroupChat() == null) {
+            chatTitle.setGroupName(groupChat);
+            chatBottom.setGroup(groupChat);
+            chatBody.clearChat();
+            return;
+        }
+        if (groupChat.getGroupID() == chatTitle.getGroupChat().getGroupID()) {
+            return;
+        }
         chatTitle.setGroupName(groupChat);
         chatBottom.setGroup(groupChat);
         chatBody.clearChat();
+
     }
 
     public void setAlluser() {

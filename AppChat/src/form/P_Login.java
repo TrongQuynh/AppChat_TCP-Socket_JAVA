@@ -15,7 +15,7 @@ public class P_Login extends javax.swing.JPanel {
 
         lbTitle = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        txtUser = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtPass = new javax.swing.JPasswordField();
         cmdLogin = new javax.swing.JButton();
@@ -28,9 +28,9 @@ public class P_Login extends javax.swing.JPanel {
         lbTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbTitle.setText("Login");
 
-        jLabel1.setText("User Name");
+        jLabel1.setText("Email");
 
-        txtUser.setText("admin");
+        txtEmail.setText("abc@gmail.com");
 
         jLabel2.setText("Password");
 
@@ -65,7 +65,7 @@ public class P_Login extends javax.swing.JPanel {
                     .addComponent(cmdRegister, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmdLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtPass)
-                    .addComponent(txtUser, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
                 .addGap(20, 20, 20))
@@ -78,7 +78,7 @@ public class P_Login extends javax.swing.JPanel {
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -96,9 +96,9 @@ public class P_Login extends javax.swing.JPanel {
     }//GEN-LAST:event_cmdRegisterActionPerformed
 
     private void cmdLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLoginActionPerformed
-        String username = this.txtUser.getText();
+        String email = this.txtEmail.getText();
         String password = new String(this.txtPass.getPassword());
-        PublicEvent.getInstance().getEventLogin().login(new Account(username,password));
+        PublicEvent.getInstance().getEventLogin().login(new Account(email,password));
     }//GEN-LAST:event_cmdLoginActionPerformed
 
 
@@ -108,7 +108,7 @@ public class P_Login extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lbTitle;
+    private javax.swing.JTextField txtEmail;
     private javax.swing.JPasswordField txtPass;
-    private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
 }

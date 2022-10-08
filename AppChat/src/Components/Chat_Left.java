@@ -2,6 +2,7 @@ package Components;
 
 import java.awt.Color;
 import javax.swing.Icon;
+import Helper.Helper;
 
 public class Chat_Left extends javax.swing.JLayeredPane {
 
@@ -32,7 +33,8 @@ public class Chat_Left extends javax.swing.JLayeredPane {
     }
 
     public void setTime() {
-        txt.setTime("10:30 PM");    //  Testing
+        String time = Helper.getCurrentTime();
+        txt.setTime(time);    //  Testing
     }
 
     @SuppressWarnings("unchecked")

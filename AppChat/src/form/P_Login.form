@@ -28,7 +28,7 @@
                   <Component id="cmdRegister" max="32767" attributes="0"/>
                   <Component id="cmdLogin" max="32767" attributes="0"/>
                   <Component id="txtPass" max="32767" attributes="0"/>
-                  <Component id="txtUser" alignment="0" max="32767" attributes="0"/>
+                  <Component id="txtEmail" alignment="0" max="32767" attributes="0"/>
                   <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
                   <Component id="jLabel2" alignment="0" pref="228" max="32767" attributes="0"/>
               </Group>
@@ -44,7 +44,7 @@
               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="txtUser" min="-2" max="-2" attributes="0"/>
+              <Component id="txtEmail" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -73,12 +73,12 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="User Name"/>
+        <Property name="text" type="java.lang.String" value="Email"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtUser">
+    <Component class="javax.swing.JTextField" name="txtEmail">
       <Properties>
-        <Property name="text" type="java.lang.String" value="admin"/>
+        <Property name="text" type="java.lang.String" value="abc@gmail.com"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">

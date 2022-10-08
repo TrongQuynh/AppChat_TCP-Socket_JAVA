@@ -3,6 +3,7 @@ package Class;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ public class MainServer {
     public MainServer(int port) {
         this.port = port;
         this.accountOnlineList = new AccountList();
-        this.userThreads = new HashSet<>();
+        this.userThreads = new HashSet<UserThread>();
     }
 
     public void runServer() {
@@ -29,11 +30,9 @@ public class MainServer {
                 System.out.println("New access Request From client");
 
                 UserThread newUser = new UserThread(socket, this);
-                Thread serverThread = new Thread(newUser);
-                serverThread.start();
-
                 // Add new UserThread into List
                 this.userThreads.add(newUser);
+                newUser.start();
 
             }
         } catch (Exception e) {
@@ -67,8 +66,10 @@ public class MainServer {
     public void boardcast(Message message, UserThread excludeUser) throws IOException {
         for (UserThread thread : this.userThreads) {
             if (thread == excludeUser) {
+//                System.out.println("User Send :" + thread.getUserAccount().getUsername() + " Thread: " + thread);
                 continue;
             }
+//            System.out.println("User :" + thread.getUserAccount().getUsername() + " Thread: " + thread);
             thread.sendMessage(message);
         }
     }
@@ -77,14 +78,18 @@ public class MainServer {
         GroupChatList gcl = getAllGroupChat();
 
         int groupID = message.getGroupID();
-        String senderID = message.getSender().getID();
-        
+        int senderID = message.getSender().getID();
+
         GroupChat groupChat = gcl.findGroupChatByID(groupID);
-        if(groupChat == null) return;
-        
-        for(UserThread thread: this.userThreads){
-            if(groupChat.findAccountByID(thread.getUserAccount().getID()) != null){
-                if(thread == excludeUser) continue;
+        if (groupChat == null) {
+            return;
+        }
+
+        for (UserThread thread : this.userThreads) {
+            if (groupChat.findAccountByID(thread.getUserAccount().getID()) != null) {
+                if (thread == excludeUser) {
+                    continue;
+                }
                 thread.sendMessage(message);
             }
         }
@@ -92,8 +97,6 @@ public class MainServer {
 
     public void unicast(Message message) throws IOException {
         Account receiver = message.getReceiver();
-        System.out.println("Mess tyep: " + message.getMessage().getMessageType());
-        System.out.println("Name of reciver: " + message.getReceiver().getUsername());
         for (UserThread thread : this.userThreads) {
             if (thread.getUserAccount().isSameAccount(receiver)) {
                 thread.sendMessage(message);
@@ -102,21 +105,22 @@ public class MainServer {
         }
 
     }
-    
-    public AccountList getAllAccount(){
+
+    public AccountList getAllAccount() {
         AccountList acc = new AccountList();
+        acc.initFile();
         acc.readDataFromFile();
         return acc;
     }
-    
-    public GroupChatList getAllGroupChat(){
+
+    public GroupChatList getAllGroupChat() {
         GroupChatList gcl = new GroupChatList();
         gcl.readDataFromFiles();
         return gcl;
     }
 
     public AccountList updateAccountStatusInList() {
-        
+
         AccountList acc = getAllAccount();
         AccountList result = new AccountList();
         for (Account a : acc.getAccountList()) {
@@ -144,15 +148,61 @@ public class MainServer {
         }
         return result;
     }
-    
-    public GroupChatList getAllGroupChatUserJoin(String userID){
+
+    public GroupChatList getAllGroupChatUserJoin(int userID) {
         GroupChatList gcl = getAllGroupChat();
         GroupChatList result = new GroupChatList();
-        for(GroupChat groupChat : gcl.getGroupChats()){
-            if(groupChat.findAccountByID(userID) == null) continue;
+        for (GroupChat groupChat : gcl.getGroupChats()) {
+            if (groupChat.findAccountByID(userID) == null) {
+                continue;
+            }
             result.addNewGroup(groupChat);
         }
         return result;
+    }
+
+    public void removeUserThreadInList(UserThread user) {
+//        boolean isHaveThread = false;
+//        for (UserThread thread : this.userThreads) {
+//            if (thread == user) {
+//                isHaveThread = true;
+//                break;
+//            }
+//        }
+//        if (isHaveThread == false) {
+//            return;
+//        }
+        this.userThreads.remove(user);
+//        this.userThreads.removeAll(userThreads);
+
+        System.out.println("Remove userthread successful: " + this.userThreads.size());
+    }
+
+    public MainServer() {
+    }
+    
+   public void UpdateThread(UserThread thread){
+       for(UserThread userThread: this.userThreads){
+           if(userThread.getUserAccount().getID() == thread.getUserAccount().getID()){
+               // if this thread exist in list
+               return;
+           }
+       }
+       this.userThreads.add(thread);
+   }
+    
+    public void removeUserinOnlineList(Account reAccount){
+        boolean isHaveAccount = false;
+        for(Account account:this.accountOnlineList.getAccountList()){
+            if(account.isSameAccount(reAccount)){
+                isHaveAccount = true;
+                break;
+            }
+        }
+        if(isHaveAccount){
+            this.accountOnlineList.getAccountList().remove(reAccount);
+            System.out.println("Remove user in online list successful: " + this.accountOnlineList.getAccountList().size());
+        }
     }
 
 //    END

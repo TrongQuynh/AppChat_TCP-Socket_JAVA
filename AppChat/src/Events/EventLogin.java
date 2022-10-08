@@ -6,7 +6,7 @@ public interface EventLogin {
 
     public void login(Account account);
 
-    public void register();
+    public void register(Account account);
 
     public void goRegister();
 

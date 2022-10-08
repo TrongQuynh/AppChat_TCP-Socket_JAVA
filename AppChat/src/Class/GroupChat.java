@@ -64,16 +64,16 @@ public class GroupChat implements Serializable{
         System.out.println(result);
     }
     
-    public Account findAccountByID(String ID){
+    public Account findAccountByID(int ID){
         for(Account account : this.group){
-            if(account.getID().equals(ID)){
+            if(account.getID() == ID){
                 return account;
             }
         }
         return null;
     }
     
-    public void updateAccountStatus(String ID, boolean isOnline){
+    public void updateAccountStatus(int ID, boolean isOnline){
         Account account = findAccountByID(ID);
         if(account != null){
             account.setIsOnline(isOnline);

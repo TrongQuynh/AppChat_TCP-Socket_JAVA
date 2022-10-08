@@ -25,16 +25,16 @@ public class Menu_Left extends javax.swing.JPanel {
     private void init() {
         sp.setVerticalScrollBar(new ScrollBar());
         menuList.setLayout(new MigLayout("fillx", "0[]0", "0[]0"));
-        
+
         accList = new AccountList();
         groupChatList = new GroupChatList();
-        
+
         PublicEvent.getInstance().addEventMenuLeft(new EventMenuLeft() {
             @Override
             public void newUser(AccountList accountList) {
                 Account currentaAAcc = ClientSocket.getInstanceClientSocket().getClient().getUserAccount();
                 menuList.removeAll();
-                
+
                 for (Account acc : accountList.getAccountList()) {
                     if (currentaAAcc.isSameAccount(acc)) {
                         continue;
@@ -56,14 +56,25 @@ public class Menu_Left extends javax.swing.JPanel {
             }
 
             @Override
-            public void newUserConnect(String userID) {
-                  for(Component com : menuList.getComponents()){
-                      Item_People acc = (Item_People) com;
-                      if(acc.getUser().getID().equals(userID)){
-                          acc.updateStatus(true);
-                          break;
-                      }
-                  }
+            public void newUserConnect(int userID) {
+                for (Component com : menuList.getComponents()) {
+                    Item_People acc = (Item_People) com;
+                    if (acc.getUser().getID() == userID) {
+                        acc.updateStatus(true);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void userDisconnect(int userID) {
+                for (Component com : menuList.getComponents()) {
+                    Item_People acc = (Item_People) com;
+                    if (acc.getUser().getID() == userID) {
+                        acc.updateStatus(false);
+                        break;
+                    }
+                }
             }
 
         });
@@ -114,6 +125,7 @@ public class Menu_Left extends javax.swing.JPanel {
         menuList = new javax.swing.JLayeredPane();
 
         setBackground(new java.awt.Color(242, 242, 242));
+        setPreferredSize(new java.awt.Dimension(200, 636));
 
         menu.setBackground(new java.awt.Color(229, 229, 229));
         menu.setOpaque(true);
@@ -191,6 +203,7 @@ public class Menu_Left extends javax.swing.JPanel {
             menuMessage.setSelected(true);
             menuGroup.setSelected(false);
             menuBox.setSelected(false);
+//            this.accList = ClientSocket.getInstanceClientSocket().getAccountList();
             showMessage();
         }
     }//GEN-LAST:event_menuMessageActionPerformed

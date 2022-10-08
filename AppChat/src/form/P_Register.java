@@ -1,5 +1,6 @@
 package form;
 
+import Class.Account;
 import Events.PublicEvent;
 
 public class P_Register extends javax.swing.JPanel {
@@ -19,19 +20,25 @@ public class P_Register extends javax.swing.JPanel {
         txtPass = new javax.swing.JPasswordField();
         cmdRegister = new javax.swing.JButton();
         cmdBackLogin = new javax.swing.JButton();
-        txtRePassword = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
+        txtEmail = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lbTitle.setFont(new java.awt.Font("sansserif", 0, 30)); // NOI18N
         lbTitle.setForeground(new java.awt.Color(87, 87, 87));
         lbTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbTitle.setText("Register");
+        add(lbTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 268, -1));
 
         jLabel1.setText("User Name");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 131, 228, -1));
+        add(txtUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 154, 228, -1));
 
         jLabel2.setText("Password");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 183, 228, -1));
+        add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 206, 228, -1));
 
         cmdRegister.setText("Register");
         cmdRegister.addActionListener(new java.awt.event.ActionListener() {
@@ -39,6 +46,7 @@ public class P_Register extends javax.swing.JPanel {
                 cmdRegisterActionPerformed(evt);
             }
         });
+        add(cmdRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 246, 228, -1));
 
         cmdBackLogin.setFont(new java.awt.Font("sansserif", 0, 11)); // NOI18N
         cmdBackLogin.setForeground(new java.awt.Color(15, 128, 206));
@@ -50,50 +58,11 @@ public class P_Register extends javax.swing.JPanel {
                 cmdBackLoginActionPerformed(evt);
             }
         });
+        add(cmdBackLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 278, 228, -1));
 
-        jLabel3.setText("Confirm Password");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lbTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cmdBackLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cmdRegister, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtPass)
-                    .addComponent(txtUser, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
-                    .addComponent(txtRePassword)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
-                .addGap(20, 20, 20))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(lbTitle)
-                .addGap(20, 20, 20)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtRePassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(cmdRegister)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmdBackLogin)
-                .addGap(0, 30, Short.MAX_VALUE))
-        );
+        jLabel3.setText("E-mail");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 79, 228, -1));
+        add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 102, 228, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmdBackLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackLoginActionPerformed
@@ -101,7 +70,8 @@ public class P_Register extends javax.swing.JPanel {
     }//GEN-LAST:event_cmdBackLoginActionPerformed
 
     private void cmdRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRegisterActionPerformed
-        PublicEvent.getInstance().getEventLogin().register();
+        Account account = new Account(this.txtEmail.getText(), this.txtUser.getText(), new String(this.txtPass.getPassword()));
+        PublicEvent.getInstance().getEventLogin().register(account);
     }//GEN-LAST:event_cmdRegisterActionPerformed
 
 
@@ -112,8 +82,8 @@ public class P_Register extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel lbTitle;
+    private javax.swing.JTextField txtEmail;
     private javax.swing.JPasswordField txtPass;
-    private javax.swing.JPasswordField txtRePassword;
     private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
 }

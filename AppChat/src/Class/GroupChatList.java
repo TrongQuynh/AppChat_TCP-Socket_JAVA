@@ -25,17 +25,17 @@ public class GroupChatList implements Serializable{
         GroupChat gc1 = new GroupChat(1, "Group 2");
         GroupChat gc2 = new GroupChat(2, "Group 3");
         
-        gc.addNewUser(new Account("Account1","admin", "123"));
-        gc.addNewUser(new Account("Account2","admin2", "123"));
-        gc.addNewUser(new Account("Account3","admin3", "123"));
+        gc.addNewUser(new Account(100,"abc@gmail.com","admin", "123"));
+        gc.addNewUser(new Account(101,"abc1@gmail.com","admin2", "123"));
+        gc.addNewUser(new Account(102,"abc2@gmail.com","admin3", "123"));
         
-        gc1.addNewUser(new Account("Account4","admin4", "123"));
-        gc1.addNewUser(new Account("Account5","admin5", "123"));
-        gc1.addNewUser(new Account("Account3","admin3", "123"));
+        gc1.addNewUser(new Account(103,"abc3@gmail.com","admin4", "123"));
+        gc1.addNewUser(new Account(104,"abc4@gmail.com","admin5", "123"));
+        gc1.addNewUser(new Account(102,"abc2@gmail.com","admin3", "123"));
         
-        gc2.addNewUser(new Account("Account1","admin", "123"));
-        gc2.addNewUser(new Account("Account5","admin5", "123"));
-        gc2.addNewUser(new Account("Account3","admin3", "123"));
+        gc2.addNewUser(new Account(100,"abc@gmail.com","admin", "123"));
+        gc2.addNewUser(new Account(104,"abc4@gmail.com","admin5", "123"));
+        gc2.addNewUser(new Account(103,"abc2@gmail.com","admin3", "123"));
         
         this.groupChats.add(gc);
         this.groupChats.add(gc1);

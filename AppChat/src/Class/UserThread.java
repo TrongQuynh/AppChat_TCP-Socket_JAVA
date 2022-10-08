@@ -4,9 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Set;
 
-public class UserThread implements Runnable {
+public class UserThread extends Thread{
 
     private Socket socket;
     private MainServer server;
@@ -37,28 +36,32 @@ public class UserThread implements Runnable {
             return false;
         }
         AccountList accountList = new AccountList();
+        accountList.initFile();
         accountList.readDataFromFile();
-        Set<Account> accounts = accountList.getAccountList();
-        AccountList accOnline = this.server.getOnlineAccounts();
-        for (Account account : accounts) {
-            boolean isTrue = acc.isSameAccount(account);
-            if (accOnline.isHaveAccount(acc)) {
-                return false;
-            }
-            if (isTrue) {
 
+        //Check if whether account is online or not
+        AccountList accOnline = this.server.getOnlineAccounts();
+        if (accOnline.isHaveAccount(acc)) {
+            System.out.println("This account already online");
+            return false;
+        }
+
+        for (Account account : accountList.getAccountList()) {
+            boolean isTrue = acc.isSameAccount(account);
+            if (isTrue) {
                 return true;
             }
         }
 
+        System.out.println("This account not have in list");
         return false;
     }
 
     private void boardcastRequet(Message message) {
         try {
-            MessageType messType = new MessageType(1, "Server has recei your message");
-            Message mess = new Message(4, this.serverAccount, messType);
-            resObject.writeObject(mess);
+//            MessageType messType = new MessageType(1, "Server has recei your message");
+//            Message mess = new Message(4, this.serverAccount, messType);
+//            resObject.writeObject(mess);
 
             this.server.boardcast(message, this);
 
@@ -70,9 +73,9 @@ public class UserThread implements Runnable {
 
     public void loginHandle(MessageType reqMessage) {
         try {
-            this.userAccount = this.server.getAllAccount()
-                    .findAccountByNameAndPass(reqMessage.getAccount().getUsername(), reqMessage.getAccount().getPassword());
-            userAccount.displayUserInfo();
+            String email = reqMessage.getAccount().getEmail();
+            String password = reqMessage.getAccount().getPassword();
+            this.userAccount = this.server.getAllAccount().findAccountByEmailAndPass(email, password);
 
             Account account = null;
             MessageType messageTyp = new MessageType(2, account);
@@ -80,6 +83,7 @@ public class UserThread implements Runnable {
             Message m = new Message(4, this.serverAccount, messageTyp);
             if (isLoginSuccess(userAccount)) { // Check login
                 this.server.addUserInOnlineList(userAccount);
+                this.userAccount.setIsOnline(true);
 
                 messageTyp.setAccount(this.userAccount);
                 resObject.writeObject(m);
@@ -93,8 +97,9 @@ public class UserThread implements Runnable {
                 m = new Message(4, this.serverAccount, messageTyp);
                 resObject.writeObject(m);
 
+                // send new user connect
                 messageTyp = new MessageType(2, userAccount);
-                m.setMessage(messageTyp);
+                m = new Message(4, messageTyp);
                 this.server.boardcast(m, this);
 
                 //Send list GroupChat
@@ -112,8 +117,32 @@ public class UserThread implements Runnable {
 
     public void registerHandle(MessageType reqMessage) {
         try {
-            Account account = reqMessage.getAccount();
+
+            // If account request Login is NULL
+            Account accountRegister = reqMessage.getAccount();
+            if (accountRegister == null) {
+                resObject.writeObject(new Message(4, this.serverAccount, new MessageType(1, "Register fail")));
+                return;
+            }
+            AccountList accountList = new AccountList();
+            accountList.initFile();
+            accountList.readDataFromFile();
+
+            //check whether this email is exist
+            String email = accountRegister.getEmail();
+            Account account = accountList.findAccountByEmail(email);
             if (account == null) {
+                int ID = accountList.generateAccountID();
+                //Check if ID is valid
+                while (accountList.findAccountByID(ID) != null) {
+                    ID += 1;
+                }
+                accountRegister.setID(ID);
+                accountList.appendDataToFile(accountRegister);
+                System.out.println("Add new Account successfule");
+                resObject.writeObject(new Message(4, this.serverAccount, new MessageType(1, "true")));
+            } else {
+                // Account exist
                 resObject.writeObject(new Message(4, this.serverAccount, new MessageType(1, "Register fail")));
                 return;
             }
@@ -144,20 +173,31 @@ public class UserThread implements Runnable {
                     this.server.multicast(reqMessage, this);
                 } else if (addressType == 1) {
                     this.server.unicast(reqMessage);
-                } else {
+                } else if (addressType == 4) {
                     // Server (Login - Register)
                     boolean isLogin = reqMessage.isIsLogin();
                     System.out.println("request Login: " + isLogin);
                     if (isLogin) {
                         loginHandle(reqMessage.getMessage());
                     } else {
-
+                        registerHandle(reqMessage.getMessage());
+                    }
+                } else {
+                    if (reqMessage.getMessage().getMessageType() == 1) {
+                        if (reqMessage.getMessage().getMessageText().equals("logout")) {
+                            System.out.println("User " + this.userAccount.getUsername() + " quit");
+                            this.userAccount.setIsOnline(false);
+                            Message message = new Message(5, new MessageType(2, userAccount));
+                            boardcastRequet(message);
+                            this.server.removeUserThreadInList(this);
+                            this.server.removeUserinOnlineList(userAccount);
+                            break;
+                        }
                     }
                 }
 
-            }
+            }//End while
 
-//            System.out.println(this.userAccount.getUsername() + " Quit");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error When create new thread");
@@ -166,6 +206,9 @@ public class UserThread implements Runnable {
 
     public void sendMessage(Message message) throws IOException {
 //        ObjectOutputStream resObject = new ObjectOutputStream(socket.getOutputStream());
+//        System.out.println("Respone OBJ: " + resObject);
+        if(message.getAddressType() == 1)System.out.println("To: " + message.getReceiver().getUsername());
+        
         resObject.writeObject(message);
 
     }

@@ -4,6 +4,7 @@ import Class.Message;
 import swing.ScrollBar;
 import java.awt.Adjustable;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.image.BufferedImage;
@@ -14,6 +15,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JScrollBar;
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 public class Chat_Body extends javax.swing.JPanel {
@@ -22,21 +24,25 @@ public class Chat_Body extends javax.swing.JPanel {
         initComponents();
         init();
 
-        addItemRight("hello", new ImageIcon("C:\\Users\\pc\\Pictures\\Nitro\\Background\\SunsetAnime.jpg"));
-        addItemRight("Send a text message to a group of contacts. Include photos, personalize your texts, and track who clicked your links.", new ImageIcon(new File("src/testing/cat.png").getAbsolutePath()), new ImageIcon(new File("src/testing/pic.jpg").getAbsolutePath()));
+//        addItemRight("hello", new ImageIcon("C:\\Users\\pc\\Pictures\\Nitro\\Background\\SunsetAnime.jpg"));
+//        addItemRight("Send a text message to a group of contacts. Include photos, personalize your texts, and track who clicked your links.", new ImageIcon(new File("src/testing/cat.png").getAbsolutePath()), new ImageIcon(new File("src/testing/pic.jpg").getAbsolutePath()));
 //        addItemRight("hello\nHi");
 //        addItemLeft("Simpletext started as a passion project because I couldn’t find what I was looking for."
 //                + " Most apps were trying to do too much and ended up bloated with features I don’t need. So I built Simpletext based on a simple premise — what if there’s an app that refuses to do more, choosing instead to do just one thing, and do it well? For Simpletext,"
 //                + " that one thing is writing.", "Raven", new ImageIcon(new File("src/testing/dog.jpg").getAbsolutePath()), new ImageIcon(new File("src/testing/pic.jpg").getAbsolutePath()));
+        addDate(Helper.Helper.getCurrentDate());
 //        addDate("05/06/2021");
+
 //        String img[] = {"LRMj,K-:?G9G_JIon}WqD~ITRPs,", "LCGlO@00.R~o.9DOO[%L02?aJ7D*"};
 //        addItemLeft("hello\nerererew\newewe", "Dara", img);
 //        addItemRight("hello\nerererew\newewe", new ImageIcon(getClass().getResource("/com/raven/icon/testing/pic.jpg")));
 //        addItemLeft("Hello this is my friend", "Jonh", new ImageIcon(getClass().getResource("/com/raven/icon/testing/dog.jpg")), new ImageIcon(getClass().getResource("/com/raven/icon/testing/dog.jpg")));
 //        addItemRight("Ok\nWhat is he name ?");
-//        addItemLeft("", "Ro", new ImageIcon(getClass().getResource("/com/raven/icon/testing/pic.jpg")));
-        addItemFile("", "Dara", "my doc.pdf", "1 MB", null);
-        addItemFileRight("", "myfile.rar", "15 MB", null);
+//        addItemLeft("Welcome to AppChat", "Server", new ImageIcon(new File("src/testing/pic.jpg").getAbsolutePath()));
+//        addItemFile("", "Dara", "my doc.pdf", "1 MB", null);
+//        addItemFileRight("", "myfile.rar", "15 MB", null);
+          addItemLeft("Welcome to AppChat", "Server");
+          addItemLeft("Let's chat now!", "Server");
     }
 
     private void init() {
@@ -162,6 +168,24 @@ public class Chat_Body extends javax.swing.JPanel {
         body.removeAll();
         repaint();
         revalidate();
+    }
+    
+    public void setMessageDataPanel(JPanel messageContent){
+//        clearChat();
+        System.out.println("ChatBody.java " + messageContent.getComponentCount());
+//        for(Component component : messageContent.getComponents()){
+//            body.add(component, "wrap, w 100::80%");
+//        }
+        body = messageContent;
+        repaint();
+        revalidate();
+    }
+    
+    public JPanel getMessageData(){
+        if(body.getComponentCount() > 0){
+            return this.body;
+        }
+        return null;
     }
 
     @SuppressWarnings("unchecked")

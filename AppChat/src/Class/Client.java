@@ -42,15 +42,14 @@ public class Client {
 
     public void runResponeThread() throws IOException {
         GetRespone respone = new GetRespone(clientSocket, this);
-
-        threadRespone = new Thread(respone);
-        threadRespone.start();
+        respone.start();
     }
 
     public void runRequestThread() throws IOException {
         SendRequest request = new SendRequest(clientSocket, this);
-        threadRequest = new Thread(request);
-        threadRequest.start();
+        request.start();
+//        threadRequest = new Thread(request);
+//        threadRequest.start();
     }
 
     public int getPort() {

@@ -1,6 +1,7 @@
 package Components;
 
 import Events.PublicEvent;
+import Helper.Helper;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -71,7 +72,8 @@ public class Chat_Right extends javax.swing.JLayeredPane {
     }
 
     public void setTime() {
-        txt.setTime("10:30 PM");    //  Testing
+        String time = Helper.getCurrentTime();
+        txt.setTime(time);    //  Testing
     }
 
     public JPanel getChatPanel() {

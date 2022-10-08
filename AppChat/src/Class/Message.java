@@ -19,6 +19,8 @@ public class Message implements Serializable {
         1-UniCast:  1 to 1
         2-Multicast: 1 to Group
         3-Broadcast: 1 to All
+        4-register and login
+        5-logout
      */
     //Multicast
     private String senderName;
@@ -45,12 +47,18 @@ public class Message implements Serializable {
         this.addressType = addressType;
     }
 
-    // register and login
+    //4-register and login
     private boolean isLogin;
     public Message(int addressType, boolean isLogin, MessageType messageType) {
         this.addressType = addressType;
         this.message = messageType;
         this.isLogin = isLogin;
+    }
+    
+    //5-logout
+    public Message(int addressType, MessageType messageType){
+        this.addressType = addressType;
+        this.message = messageType;
     }
     
     //    END Constructor
