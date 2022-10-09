@@ -81,7 +81,7 @@ public class Item_People extends javax.swing.JPanel {
                 }else if(menuType == 2){
                     PublicEvent.getInstance().getEventMain().selectGroup(groupChat);
                 }else{
-                    PublicEvent.getInstance().getEventMain().selectUser(new Account("All User"));
+                    PublicEvent.getInstance().getEventMain().selectSendAll();
                 }
                 ClientSocket.getInstanceClientSocket().setCurrentAddressType(menuType);
             }

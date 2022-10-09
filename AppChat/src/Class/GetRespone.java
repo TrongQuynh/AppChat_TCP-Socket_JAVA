@@ -23,7 +23,7 @@ public class GetRespone extends Thread {
 
             resObject = new ObjectInputStream(clientSocket.getInputStream());
             while (true) {
-                System.out.println("New message from server");
+                
                 Message resMessage = (Message) resObject.readObject();
                 int messageType = resMessage.getMessage().getMessageType();
                 if (!client.isLogin) {
@@ -57,7 +57,7 @@ public class GetRespone extends Thread {
                 } else {
 
                     int addressType = resMessage.getAddressType();
-
+                    System.out.println("New message from server: " + addressType);
                     if (addressType == 4) {
                         // From Server
                         if (messageType == 1) {

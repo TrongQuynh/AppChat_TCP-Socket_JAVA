@@ -42,7 +42,7 @@ public class Menu_Left extends javax.swing.JPanel {
                     accList.addNewAccount(acc);
                     menuList.add(new Item_People(acc), "wrap");
                     refreshMenuList();
-                }
+                } 
             }
 
             @Override
@@ -53,6 +53,7 @@ public class Menu_Left extends javax.swing.JPanel {
                     menuList.add(new Item_People(group), "wrap");
                     refreshMenuList();
                 }
+               
             }
 
             @Override
@@ -78,8 +79,10 @@ public class Menu_Left extends javax.swing.JPanel {
             }
 
         });
-
-//        showMessage();
+        menuMessage.setSelected(true);
+        menuGroup.setSelected(false);
+        menuBox.setSelected(false);
+        ClientSocket.getInstanceClientSocket().setCurrentAddressType(3);
     }
 
     private void showMessage() {
@@ -151,7 +154,6 @@ public class Menu_Left extends javax.swing.JPanel {
         });
         menu.add(menuGroup);
 
-        menuBox.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/box.png"))); // NOI18N
         menuBox.setIconSelected(new javax.swing.ImageIcon(getClass().getResource("/Icons/box_selected.png"))); // NOI18N
         menuBox.setIconSimple(new javax.swing.ImageIcon(getClass().getResource("/Icons/box.png"))); // NOI18N
         menuBox.addActionListener(new java.awt.event.ActionListener() {
@@ -203,8 +205,9 @@ public class Menu_Left extends javax.swing.JPanel {
             menuMessage.setSelected(true);
             menuGroup.setSelected(false);
             menuBox.setSelected(false);
-//            this.accList = ClientSocket.getInstanceClientSocket().getAccountList();
+            this.accList = ClientSocket.getInstanceClientSocket().getAccountList();
             showMessage();
+            ClientSocket.getInstanceClientSocket().setCurrentAddressType(1);
         }
     }//GEN-LAST:event_menuMessageActionPerformed
 
@@ -215,6 +218,7 @@ public class Menu_Left extends javax.swing.JPanel {
             menuBox.setSelected(false);
             this.groupChatList = ClientSocket.getInstanceClientSocket().getGroupChatList();
             showGroup();
+            ClientSocket.getInstanceClientSocket().setCurrentAddressType(2);
         }
     }//GEN-LAST:event_menuGroupActionPerformed
 
@@ -223,6 +227,7 @@ public class Menu_Left extends javax.swing.JPanel {
             menuMessage.setSelected(false);
             menuGroup.setSelected(false);
             menuBox.setSelected(true);
+            ClientSocket.getInstanceClientSocket().setCurrentAddressType(3);
             showBox();
         }
     }//GEN-LAST:event_menuBoxActionPerformed

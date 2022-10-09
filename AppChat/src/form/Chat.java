@@ -13,21 +13,16 @@ import Components.Chat_Title;
 import DB.MessageDB;
 import Events.EventChat;
 import Events.PublicEvent;
-import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 public class Chat extends javax.swing.JPanel {
@@ -44,9 +39,11 @@ public class Chat extends javax.swing.JPanel {
     private void init() {
         setLayout(new MigLayout("fillx", "0[fill]0", "0[]0[100%, bottom]0[shrink 0]0"));
         chatTitle = new Chat_Title();
+        
         chatBody = new Chat_Body();
         chatBottom = new Chat_Bottom();
         messageDB = new MessageDB();
+        chatTitle.setAllUser(new Account("Server"));
         PublicEvent.getInstance().addEventChat(new EventChat() {
             @Override
             public void sendMessage(String text, Account receiver) {
@@ -84,8 +81,7 @@ public class Chat extends javax.swing.JPanel {
 
             @Override
             public void receiveMessage(Message data) {
-                System.out.println("Recei data at chat.java");
-                int currentAddressType = ClientSocket.getInstanceClientSocket().getCurrentAddressType();
+                int currentAddressType = data.getAddressType();
                 int messageType = data.getMessage().getMessageType();
                 try {
                     if (currentAddressType == 1) {
@@ -105,8 +101,12 @@ public class Chat extends javax.swing.JPanel {
                         if (groupID == chatTitle.getGroupChat().getGroupID()) {
                             chatBody.addItemLeftWithProfile(data);
                         }
-                    } else {
-                        chatBody.addItemLeftWithProfile(data);
+                    } else if(currentAddressType == 3) {
+                        String boxName = chatTitle.getAllUser().getUsername();
+                        if(boxName.equals("Server")){
+                            chatBody.addItemLeftWithProfile(data);
+                        }
+                        
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -241,6 +241,10 @@ public class Chat extends javax.swing.JPanel {
     private MessageDB messageDB;
 
     public void setUser(Account currentAccount) {
+        Account preAccount = chatTitle.getAccount();
+        if (currentAccount.isSameAccount(preAccount)) {
+            return;
+        }
         chatTitle.setUserName(currentAccount);
         chatBottom.setUser(currentAccount);
         chatBody.clearChat();
@@ -309,8 +313,10 @@ public class Chat extends javax.swing.JPanel {
     }
 
     public void setAlluser() {
-
-        chatTitle.setAllUser("All User");
+        if(chatTitle.getAllUser().getUsername().equals("Server")){
+            return;
+        }
+        chatTitle.setAllUser(new Account("Server"));
         chatBody.clearChat();
     }
 

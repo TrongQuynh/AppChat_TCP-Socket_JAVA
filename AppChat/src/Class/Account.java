@@ -21,6 +21,7 @@ public class Account implements Serializable {
     }
 
     public Account(String username) {
+        this.username = username;
         this.avartar = new File("src/Images/DefaultAccountImg.png");
     }
 

@@ -45,6 +45,11 @@ public class Menu_Right extends javax.swing.JPanel {
             }
         });
     }
+    
+    private void eventLogout(){
+        PublicEvent.getInstance().getEventMenuRight().logout();
+        System.exit(0);
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -52,7 +57,7 @@ public class Menu_Right extends javax.swing.JPanel {
 
         User_Avatar = new swing.ImageAvatar();
         txt_Username = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        btn_Logout = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(249, 249, 249));
 
@@ -62,8 +67,22 @@ public class Menu_Right extends javax.swing.JPanel {
         txt_Username.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         txt_Username.setText("Username");
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/logout.png"))); // NOI18N
+        btn_Logout.setBackground(new java.awt.Color(249, 249, 249));
+        btn_Logout.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn_Logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/logout.png"))); // NOI18N
+        btn_Logout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_Logout.setOpaque(true);
+        btn_Logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_LogoutMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn_LogoutMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btn_LogoutMouseExited(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -74,7 +93,7 @@ public class Menu_Right extends javax.swing.JPanel {
                 .addComponent(User_Avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(52, Short.MAX_VALUE))
             .addComponent(txt_Username, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btn_Logout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -83,15 +102,31 @@ public class Menu_Right extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(txt_Username)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 504, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(btn_Logout)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btn_LogoutMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LogoutMouseEntered
+        this.btn_Logout.setBackground(new Color(240,240,240));
+    }//GEN-LAST:event_btn_LogoutMouseEntered
+
+    private void btn_LogoutMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LogoutMouseExited
+        try {
+            Thread.sleep(300);
+        } catch (Exception e) {
+        }
+        this.btn_Logout.setBackground(new Color(249,249,249));
+    }//GEN-LAST:event_btn_LogoutMouseExited
+
+    private void btn_LogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LogoutMouseClicked
+        eventLogout();
+    }//GEN-LAST:event_btn_LogoutMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private swing.ImageAvatar User_Avatar;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel btn_Logout;
     private javax.swing.JLabel txt_Username;
     // End of variables declaration//GEN-END:variables
 }

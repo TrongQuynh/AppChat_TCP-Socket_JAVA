@@ -8,10 +8,12 @@ public class Chat_Title extends javax.swing.JPanel {
 
     private Account account;
     private GroupChat groupChat;
-    
+    private Account AllUser;
 
     public Chat_Title() {
         initComponents();
+//        this.lbName.setText("Server");
+//        this.AllUser = new Account("Server");
     }
 
     public void setUserName(Account account) {
@@ -34,8 +36,10 @@ public class Chat_Title extends javax.swing.JPanel {
         }
     }
     
-    public void setAllUser(String username){
-        lbName.setText(username);
+    public void setAllUser(Account AllUser){
+        System.out.println("SET ALL USERS: " + AllUser.getUsername());
+        lbName.setText(AllUser.getUsername());
+        this.AllUser = AllUser;
         statusActive();
     }
 
@@ -47,6 +51,9 @@ public class Chat_Title extends javax.swing.JPanel {
         return this.groupChat;
     }
     
+    public Account getAllUser(){
+        return this.AllUser;
+    }
 
     public void updateUser(Account account) {
         if (this.account == account) {
