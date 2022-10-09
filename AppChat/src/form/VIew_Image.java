@@ -4,7 +4,10 @@ import Events.PublicEvent;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class VIew_Image extends javax.swing.JComponent {
@@ -14,10 +17,14 @@ public class VIew_Image extends javax.swing.JComponent {
     }
 
     private Icon image;
+    private BufferedImage bImage;
+    private String filename;
 
-    public void viewImage(Icon image) {
+    public void viewImage(Icon image, BufferedImage bImage,String filename) {
         this.image = image;
         pic.setImage(image);
+        this.bImage = bImage;
+        this.filename = filename;
         setVisible(true);
     }
 
@@ -81,7 +88,16 @@ public class VIew_Image extends javax.swing.JComponent {
     }//GEN-LAST:event_picMousePressed
 
     private void cmdSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdSaveActionPerformed
-        PublicEvent.getInstance().getEventImageView().saveImage(image);
+        int chooser = JOptionPane.showConfirmDialog(this,
+                        "Do you want download \"" + "Picture" + "\" ?","Download Picture",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                        new ImageIcon("src/Icons/file.png")
+                );
+        if(chooser == 0){
+            PublicEvent.getInstance().getEventImageView().saveImage(image, bImage, filename);
+        }
+        
+        
     }//GEN-LAST:event_cmdSaveActionPerformed
 
     @Override

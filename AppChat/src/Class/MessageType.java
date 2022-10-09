@@ -21,12 +21,14 @@ public class MessageType implements Serializable {
         4-array GroupChat object message
         5-Image
         6-File
+        7-Object Group
      */
     private int messageType;
     private String messageText;
     private Account account;
     private AccountList accountList;
     private GroupChatList groupChatList;
+    private GroupChat groupChat;
 
     //1
     public MessageType(int messageType, String messageText) {
@@ -57,10 +59,11 @@ public class MessageType implements Serializable {
         Lớp BufferedImage là lớp chuyên để làm việc với ảnh, lớp này lưu một mảng 2 chiều chứa thông tin của từng pixel trong ảnh.
      */
     private byte[] bytesPicture;
-
+    private String formatFile;
     public MessageType(int messagetype, BufferedImage bufferedImages, String format) {
         try {
             this.messageType = messagetype;
+            this.formatFile = format;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(bufferedImages, format, baos);
             this.bytesPicture = baos.toByteArray();
@@ -82,6 +85,12 @@ public class MessageType implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    //7 - Object Group
+    public MessageType(int messageType, GroupChat groupChat) {
+        this.messageType = messageType;
+        this.groupChat = groupChat;
     }
 
     public int getMessageType() {
@@ -154,6 +163,22 @@ public class MessageType implements Serializable {
 
     public void setFilename(String filename) {
         this.filename = filename;
+    }
+
+    public String getformatFile() {
+        return formatFile;
+    }
+
+    public void setFormatFile(String format) {
+        this.formatFile = formatFile;
+    }
+
+    public GroupChat getGroupChat() {
+        return groupChat;
+    }
+
+    public void setGroupChat(GroupChat groupChat) {
+        this.groupChat = groupChat;
     }
     
 }

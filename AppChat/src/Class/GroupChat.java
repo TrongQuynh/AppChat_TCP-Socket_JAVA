@@ -22,6 +22,12 @@ public class GroupChat implements Serializable{
         this.group = new HashSet<Account>();
         this.avatar = new File("src/Images/DefaultAccountImg.png");
     }
+    
+    public GroupChat(String groupName, Set<Account> group) {
+        this.groupName = groupName;
+        this.group = group;
+        this.avatar = new File("src/Images/DefaultAccountImg.png");
+    }
 
     public Set<Account> getGroup() {
         return group;

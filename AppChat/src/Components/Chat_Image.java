@@ -7,6 +7,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 import net.miginfocom.swing.MigLayout;
@@ -17,7 +18,14 @@ public class Chat_Image extends javax.swing.JLayeredPane {
         initComponents();
         setLayout(new MigLayout("", "0[" + (right ? "right" : "left") + "]0", "3[]3"));
     }
-
+    
+    private BufferedImage bImage;
+    private String filename;
+    public void setPictureContent(BufferedImage bImage, String filename){
+        this.bImage = bImage;
+        this.filename = filename;
+    }
+    
     public void addImage(Icon... images) {
         for (Icon image : images) {
             PictureBox pic = new PictureBox();
@@ -44,7 +52,7 @@ public class Chat_Image extends javax.swing.JLayeredPane {
             @Override
             public void mouseClicked(MouseEvent me) {
                 if (SwingUtilities.isLeftMouseButton(me)) {
-                    PublicEvent.getInstance().getEventImageView().viewImage(image);
+                    PublicEvent.getInstance().getEventImageView().viewImage(image, bImage, filename);
                 }
             }
         });

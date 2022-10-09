@@ -3,13 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/form/Menu_Left.java</file>
-            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/Components/Item_People.java</file>
-            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/Components/Chat_Title.java</file>
-            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/Components/Chat_Body.java</file>
+            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/form/CreateGroupChat.java</file>
+            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/Components/Chat_Left_With_Profile.java</file>
+            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/Components/IPeople_GChat.java</file>
+            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/form/VIew_Image.java</file>
             <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/Class/GetRespone.java</file>
-            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/form/Chat.java</file>
+            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/form/Menu_Left.java</file>
+            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/Components/Chat_Body.java</file>
+            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/main/Main.java</file>
+            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/form/Menu_Right.java</file>
+            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/form/Menu_ChooseUser.java</file>
+            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/Components/Chat_Right.java</file>
             <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/Class/UserThread.java</file>
+            <file>file:/D:/Code/Java/Network%20Programming/AppChat/src/form/Chat.java</file>
         </group>
     </open-files>
 </project-private>

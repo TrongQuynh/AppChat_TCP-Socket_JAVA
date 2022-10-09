@@ -42,7 +42,7 @@ public class Menu_Left extends javax.swing.JPanel {
                     accList.addNewAccount(acc);
                     menuList.add(new Item_People(acc), "wrap");
                     refreshMenuList();
-                } 
+                }
             }
 
             @Override
@@ -53,13 +53,15 @@ public class Menu_Left extends javax.swing.JPanel {
                     menuList.add(new Item_People(group), "wrap");
                     refreshMenuList();
                 }
-               
+
             }
 
             @Override
             public void newUserConnect(int userID) {
+
                 for (Component com : menuList.getComponents()) {
                     Item_People acc = (Item_People) com;
+                    if(acc.getUser() == null) break;
                     if (acc.getUser().getID() == userID) {
                         acc.updateStatus(true);
                         break;

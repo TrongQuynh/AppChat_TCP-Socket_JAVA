@@ -53,7 +53,7 @@
     <Container class="swing.PictureBox" name="pic">
       <Properties>
         <Property name="image" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/Icons/login_image.png"/>
+          <Image iconType="3" name="/Icons/login_Image.png"/>
         </Property>
       </Properties>
 

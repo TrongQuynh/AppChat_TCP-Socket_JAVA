@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -95,6 +96,10 @@ public class Chat_Left_With_Profile extends javax.swing.JLayeredPane {
 
     public void setFileContent(byte[] fileContent) {
         this.fileContent = fileContent;
+    }
+    
+    public void setPictureContent(String filename,BufferedImage bImage,Icon... image){
+        txt.setImage(false, filename,bImage,image);
     }
     
     

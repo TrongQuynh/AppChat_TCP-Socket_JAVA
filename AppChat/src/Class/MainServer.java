@@ -115,7 +115,8 @@ public class MainServer {
 
     public GroupChatList getAllGroupChat() {
         GroupChatList gcl = new GroupChatList();
-        gcl.readDataFromFiles();
+        gcl.initFile();
+        gcl.readDataFromFile();
         return gcl;
     }
 
@@ -137,8 +138,8 @@ public class MainServer {
     }
 
     public GroupChatList updateAccountStatusInGroupCaht() {
-        GroupChatList gcl = new GroupChatList();
-        gcl.readDataFromFiles();
+        GroupChatList gcl = getAllGroupChat();
+        
         GroupChatList result = new GroupChatList();
         for (GroupChat gc : gcl.getGroupChats()) {
             for (Account account : this.accountOnlineList.getAccountList()) {

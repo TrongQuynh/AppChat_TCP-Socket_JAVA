@@ -17,6 +17,10 @@ public class Menu_ChooseUser extends javax.swing.JPanel {
     private AccountList accList;
     private Set<Account> userInNewGroup;
     
+    public Set<Account> getUserInNewGroup(){
+        return this.userInNewGroup;
+    }
+    
     public Menu_ChooseUser() {
         initComponents();
         init();

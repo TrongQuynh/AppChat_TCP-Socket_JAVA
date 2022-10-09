@@ -150,6 +150,20 @@ public class UserThread extends Thread{
         } catch (Exception e) {
         }
     }
+    
+    private void createNewGroupChatHandle(GroupChat groupChat) throws IOException{
+        GroupChatList groupChatList = this.server.getAllGroupChat();
+        int ID = groupChatList.GenerateGroupChatID();
+        groupChat.setGroupID(ID);
+        groupChatList.appendDataToFile(groupChat);
+        groupChatList.getGroupChats().removeAll(groupChatList.getGroupChats());
+        groupChatList.readDataFromFile();
+        // Send back respone
+        System.out.println("Current number group chat: " + groupChatList.getGroupChats().size());
+        Message message = new Message(4, new MessageType(4, groupChatList));
+        resObject.writeObject(message);
+        boardcastRequet(message);
+    }
 
     @Override
     public void run() {
@@ -167,6 +181,7 @@ public class UserThread extends Thread{
                  */
                 System.out.println(reqMessage.getAddressType());
                 int addressType = reqMessage.getAddressType();
+                int messageType = reqMessage.getMessage().getMessageType();
                 if (addressType == 3) {
                     boardcastRequet(reqMessage);
                 } else if (addressType == 2) {
@@ -175,13 +190,19 @@ public class UserThread extends Thread{
                     this.server.unicast(reqMessage);
                 } else if (addressType == 4) {
                     // Server (Login - Register)
-                    boolean isLogin = reqMessage.isIsLogin();
-                    System.out.println("request Login: " + isLogin);
-                    if (isLogin) {
-                        loginHandle(reqMessage.getMessage());
-                    } else {
-                        registerHandle(reqMessage.getMessage());
+                    if(messageType == 2){
+                        boolean isLogin = reqMessage.isIsLogin();
+                        System.out.println("request Login: " + isLogin);
+                        if (isLogin) {
+                            loginHandle(reqMessage.getMessage());
+                        } else {
+                            registerHandle(reqMessage.getMessage());
+                        }
+                    }else if(messageType == 7){
+                        // Create new group chat
+                        createNewGroupChatHandle(reqMessage.getMessage().getGroupChat());
                     }
+                    
                 } else {
                     if (reqMessage.getMessage().getMessageType() == 1) {
                         if (reqMessage.getMessage().getMessageText().equals("logout")) {

@@ -10,6 +10,7 @@ import java.awt.event.AdjustmentListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -85,12 +86,15 @@ public class Chat_Body extends javax.swing.JPanel {
             if (messType == 1) {
                 item.setText(message.getMessage().getMessageText());
             } else if (messType == 5) {
-                System.out.println("Receiv Picture at Chat_Body.java");
+                // Picture
                 byte[] bytesPicture = message.getMessage().getBytesPicture();
+                String format =  message.getMessage().getformatFile();
+                String fileName = "Picture1." + format;
                 // convert byte[] to BufferedImage
                 InputStream is = new ByteArrayInputStream(bytesPicture);
                 BufferedImage bufferedImage = ImageIO.read(is);
-                item.setImage(new ImageIcon(bufferedImage));
+//                item.setImage(new ImageIcon(bufferedImage));
+                item.setPictureContent(fileName,bufferedImage, new ImageIcon(bufferedImage));
             }
             item.setTime();
             body.add(item, "wrap, w 100::80%");
@@ -133,6 +137,21 @@ public class Chat_Body extends javax.swing.JPanel {
         Chat_Right item = new Chat_Right();
         item.setText(text);
         item.setImage(image);
+        body.add(item, "wrap, al right, w 100::80%");
+        //  ::80% set max with 80%
+        repaint();
+        revalidate();
+        item.setTime();
+        scrollToBottom();
+    }
+    
+    public void addItemRight(String text, File file) throws IOException {
+        ImageIcon imageIcon = new ImageIcon(file.getAbsolutePath());
+        BufferedImage bufferedImage = ImageIO.read(file);
+        Chat_Right item = new Chat_Right();
+        item.setText(text);
+        String filename = file.getName();
+        item.setPictureContent(bufferedImage,filename,imageIcon);
         body.add(item, "wrap, al right, w 100::80%");
         //  ::80% set max with 80%
         repaint();

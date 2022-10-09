@@ -103,7 +103,7 @@ public class Login extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        pic.setImage(new javax.swing.ImageIcon(getClass().getResource("/Icons/login_image.png"))); // NOI18N
+        pic.setImage(new javax.swing.ImageIcon(getClass().getResource("/Icons/login_Image.png"))); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(66, 66, 66));

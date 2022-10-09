@@ -11,9 +11,13 @@ import Events.PublicEvent;
 import swing.ComponentResizer;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -94,13 +98,39 @@ public class Main extends javax.swing.JFrame {
         });
         PublicEvent.getInstance().addEventImageView(new EventImageView() {
             @Override
-            public void viewImage(Icon image) {
-                vIew_Image.viewImage(image);
+            public void viewImage(Icon image, BufferedImage bImage, String filename) {
+                vIew_Image.viewImage(image, bImage, filename);
             }
 
             @Override
-            public void saveImage(Icon image) {
-                System.out.println("Save Image next update");
+            public void saveImage(Icon image, BufferedImage bImage, String filename) {
+                try {
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                    int chooser = fileChooser.showDialog(null, "Save");
+                    if (chooser == JFileChooser.APPROVE_OPTION) {
+                        File fileDirectory = fileChooser.getSelectedFile();
+                        String extension = "";
+                        int index = filename.lastIndexOf('.');
+                        if (index > 0) {
+                            extension = filename.substring(index + 1);
+
+                        }
+                        if(extension == ""){
+                            System.out.println("Save picture fail! extension is empty");
+                            return;
+                        }
+                        String filePath = fileDirectory.toString() + "\\" + filename;
+                        File newFile = new File(filePath);
+
+                        ImageIO.write(bImage, extension, newFile);
+                        JOptionPane.showMessageDialog(null, "Save Picture successful!", "Save File",
+                                JOptionPane.OK_OPTION, new ImageIcon("src/Icons/file.png"));
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
         });

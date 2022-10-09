@@ -115,18 +115,21 @@ public class Chat extends javax.swing.JPanel {
 
             @Override
             public void sendFile(File file) {
-                System.out.println("Show file chat.java " + file.toString());
                 MessageType messageType = null;
                 Client client = ClientSocket.getInstanceClientSocket().getClient();
                 Account sender = client.getUserAccount();
                 if (isFileAPicture(file)) {
                     try {
                         // show message of sender
-                        ImageIcon imageIcon = new ImageIcon(file.getAbsolutePath());
-                        chatBody.addItemRight("", imageIcon);
+                        
+
 
                         BufferedImage bufferedImage = ImageIO.read(file);
                         String format = getFileExtension(file);
+                        String fileName = file.getName();
+                        
+                        chatBody.addItemRight("", file);
+                        System.out.println("SEND PICTURE -----------: " + fileName);
                         if (format == null) {
                             System.out.println("Format == null");
                             return;
@@ -163,12 +166,10 @@ public class Chat extends javax.swing.JPanel {
                 try {
                     int currentAddressType = ClientSocket.getInstanceClientSocket().getCurrentAddressType();
                     if (currentAddressType == 1) {
-                        System.out.println("Show messType before send chat.java: " + messageType.getMessageType());
                         Account receiver = chatTitle.getAccount();
                         Message message = new Message(1, sender, receiver, messageType);
                         client.reqMessage = message;
                         client.runRequestThread();
-                        System.out.println("Send picture inChat.java");
                     } else if (currentAddressType == 2) {
                         // Sendto group
                         int groupID = chatTitle.getGroupChat().getGroupID();
@@ -193,10 +194,8 @@ public class Chat extends javax.swing.JPanel {
                 int chooser = fileChooser.showDialog(null, "Save");
                 if (chooser == JFileChooser.APPROVE_OPTION) {
                     File fileDirectory = fileChooser.getSelectedFile();
-                    System.out.println("Chat.java Place save file: " + fileDirectory);
                     String filePath = fileDirectory.toString() + "\\" + filename;
                     try {
-                        System.out.println("cha.java filepath: " + filePath);
                         File newFile = new File(filePath);
                         OutputStream os = new FileOutputStream(newFile);
                         os.write(fileContent);

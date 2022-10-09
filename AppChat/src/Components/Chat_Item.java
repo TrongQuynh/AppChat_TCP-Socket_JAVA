@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -66,6 +67,19 @@ public class Chat_Item extends javax.swing.JLayeredPane {
             add(layer);
         }
     }
+    
+    public void setImage(boolean right, String filename,BufferedImage bImage,Icon... image) {
+        if (image.length > 0) {
+            JLayeredPane layer = new JLayeredPane();
+            layer.setLayout(new FlowLayout(right ? FlowLayout.RIGHT : FlowLayout.LEFT));
+            layer.setBorder(new EmptyBorder(0, 5, 0, 5));
+            Chat_Image chatImage = new Chat_Image(right);
+            chatImage.addImage(image);
+            chatImage.setPictureContent(bImage, filename);
+            layer.add(chatImage);
+            add(layer);
+        }
+    }
 
     public void setImage(boolean right, String... image) {
         JLayeredPane layer = new JLayeredPane();
@@ -89,13 +103,13 @@ public class Chat_Item extends javax.swing.JLayeredPane {
 
     public void sendSuccess() {
         if (label != null) {
-            label.setIcon(new ImageIcon(getClass().getResource("/com/raven/icon/tick.png")));
+            label.setIcon(new ImageIcon(getClass().getResource("/src/Icons/tick.png")));
         }
     }
 
     public void seen() {
         if (label != null) {
-            label.setIcon(new ImageIcon(getClass().getResource("/com/raven/icon/double_tick.png")));
+            label.setIcon(new ImageIcon(getClass().getResource("/src/Icons/double_tick.png")));
         }
     }
 
