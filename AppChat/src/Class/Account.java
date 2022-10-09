@@ -22,6 +22,7 @@ public class Account implements Serializable {
 
     public Account(String username) {
         this.username = username;
+        this.isOnline = true;
         this.avartar = new File("src/Images/DefaultAccountImg.png");
     }
 
@@ -49,7 +50,10 @@ public class Account implements Serializable {
     }
 
     public void displayUserInfo() {
-        System.out.println("ID: " + ID + "\n Email: " + email +"\n Username: " + username + "\n Password: " + password);
+        System.out.println("ID: " + ID + "\n Email: " + email +"\n Username: " 
+                + username + "\n Password: " + password + "\n isOnline: " + isOnline
+                + "\n Avatar: " + avartar
+        );
     }
 
     public String getUsername() {

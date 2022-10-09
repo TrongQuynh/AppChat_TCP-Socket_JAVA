@@ -15,6 +15,7 @@ import java.io.File;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class Main extends javax.swing.JFrame {
 
@@ -80,6 +81,16 @@ public class Main extends javax.swing.JFrame {
             public void selectSendAll() {
                 home.selectAllUser();
             }
+
+            @Override
+            public void showLogin(boolean show) {
+                login.setVisible(show);
+            }
+
+            @Override
+            public void destroyChat() {
+                home.setVisible(false);
+            }
         });
         PublicEvent.getInstance().addEventImageView(new EventImageView() {
             @Override
@@ -93,6 +104,17 @@ public class Main extends javax.swing.JFrame {
             }
 
         });
+    }
+
+    private void eventExit() {
+        ImageIcon icon = new ImageIcon("src/Icons/logout.png");
+        int chooser = JOptionPane.showConfirmDialog(this,
+                "Are you sure want to \"Exit\"? ", "Exit",
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, icon);
+        if (chooser == 0) {
+            PublicEvent.getInstance().getEventMenuRight().logout();
+            System.exit(0);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -241,8 +263,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_titleMousePressed
 
     private void cmdCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCloseActionPerformed
-        PublicEvent.getInstance().getEventMenuRight().logout();
-        System.exit(0);
+        eventExit();
     }//GEN-LAST:event_cmdCloseActionPerformed
 
     private void cmdMinimizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdMinimizeActionPerformed

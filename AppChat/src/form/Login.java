@@ -36,6 +36,8 @@ public class Login extends javax.swing.JPanel {
                             client.setUserAccount(account);
                             client.runRequestThread();
                             PublicEvent.getInstance().getEventMain().showLoading(false);
+                            PublicEvent.getInstance().getEventMain().initChat();
+                            setVisible(false);
                         } catch (InterruptedException e) {
                         } catch (IOException ex) {
                             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);

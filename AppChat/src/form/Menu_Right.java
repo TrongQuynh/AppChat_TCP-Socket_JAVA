@@ -13,7 +13,11 @@ import Class.MessageType;
 import Events.EventMenuRight;
 import Events.PublicEvent;
 import java.awt.Color;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,6 +30,8 @@ public class Menu_Right extends javax.swing.JPanel {
         PublicEvent.getInstance().addEventMenuRight(new EventMenuRight() {
             @Override
             public void setUser(Account account) {
+                System.out.println("SET Menu RIght: ");
+                account.displayUserInfo();
                 User_Avatar.setBorderColor(Color.GREEN);
                 User_Avatar.setImage(new ImageIcon(account.getAvartar().getAbsolutePath()));
                 txt_Username.setText(account.getUsername());
@@ -33,22 +39,46 @@ public class Menu_Right extends javax.swing.JPanel {
 
             @Override
             public void logout() {
-                try {
-                    Client client = ClientSocket.getInstanceClientSocket().getClient();
-                    MessageType messageType = new MessageType(1, "logout");
-                    Message message = new Message(5, messageType);
-                    client.reqMessage = message;
-                    client.runRequestThread();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        PublicEvent.getInstance().getEventMain().showLoading(true);
+                        try {
+                            Thread.sleep(1000);
+                            eventSendRequestLogOut();
+                            
+                            PublicEvent.getInstance().getEventMain().destroyChat();
+                            PublicEvent.getInstance().getEventMain().showLogin(true);
+                            PublicEvent.getInstance().getEventMain().showLoading(false);
+                        } catch (InterruptedException e) {
+                        }
+
+                    }
+                }).start();
             }
         });
     }
-    
-    private void eventLogout(){
-        PublicEvent.getInstance().getEventMenuRight().logout();
-        System.exit(0);
+
+    private void eventSendRequestLogOut() {
+        try {
+            Client client = ClientSocket.getInstanceClientSocket().getClient();
+            MessageType messageType = new MessageType(1, "logout");
+            Message message = new Message(5, messageType);
+            client.reqMessage = message;
+            client.runRequestThread();
+        } catch (Exception e) {
+        }
+    }
+
+    private void eventLogout() {
+         ImageIcon icon = new ImageIcon("src/Icons/logout.png");
+        int chooser = JOptionPane.showConfirmDialog(this, 
+                "Are you sure want to \"Log out\"? ", "Log out!", 
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,icon);
+        if(chooser == 0){
+            //Yes
+            PublicEvent.getInstance().getEventMenuRight().logout();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -108,7 +138,7 @@ public class Menu_Right extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_LogoutMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LogoutMouseEntered
-        this.btn_Logout.setBackground(new Color(240,240,240));
+        this.btn_Logout.setBackground(new Color(240, 240, 240));
     }//GEN-LAST:event_btn_LogoutMouseEntered
 
     private void btn_LogoutMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LogoutMouseExited
@@ -116,7 +146,7 @@ public class Menu_Right extends javax.swing.JPanel {
             Thread.sleep(300);
         } catch (Exception e) {
         }
-        this.btn_Logout.setBackground(new Color(249,249,249));
+        this.btn_Logout.setBackground(new Color(249, 249, 249));
     }//GEN-LAST:event_btn_LogoutMouseExited
 
     private void btn_LogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LogoutMouseClicked

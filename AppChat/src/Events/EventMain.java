@@ -6,8 +6,12 @@ import Class.GroupChat;
 public interface EventMain {
 
     public void showLoading(boolean show);
+    
+    public void showLogin(boolean show);
 
     public void initChat();
+    
+    public void destroyChat();
     
     public void selectUser(Account user);
     

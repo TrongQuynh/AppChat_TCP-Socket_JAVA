@@ -16,7 +16,7 @@ public class Loading extends javax.swing.JComponent {
 
         lb = new javax.swing.JLabel();
 
-        lb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/login_image.png"))); // NOI18N
+        lb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/loading.gif"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
