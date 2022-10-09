@@ -39,45 +39,46 @@ public class Menu_Right extends javax.swing.JPanel {
 
             @Override
             public void logout() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        PublicEvent.getInstance().getEventMain().showLoading(true);
-                        try {
-                            Thread.sleep(1000);
-                            eventSendRequestLogOut();
-                            
-                            PublicEvent.getInstance().getEventMain().destroyChat();
-                            PublicEvent.getInstance().getEventMain().showLogin(true);
-                            PublicEvent.getInstance().getEventMain().showLoading(false);
-                        } catch (InterruptedException e) {
-                        }
-
-                    }
-                }).start();
+                try {
+                    Client client = ClientSocket.getInstanceClientSocket().getClient();
+                    MessageType messageType = new MessageType(1, "logout");
+                    Message message = new Message(5, messageType);
+                    client.reqMessage = message;
+                    client.runRequestThread();
+                } catch (Exception e) {
+                }
             }
         });
     }
 
     private void eventSendRequestLogOut() {
-        try {
-            Client client = ClientSocket.getInstanceClientSocket().getClient();
-            MessageType messageType = new MessageType(1, "logout");
-            Message message = new Message(5, messageType);
-            client.reqMessage = message;
-            client.runRequestThread();
-        } catch (Exception e) {
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PublicEvent.getInstance().getEventMain().showLoading(true);
+                try {
+                    Thread.sleep(1000);
+                    
+                    PublicEvent.getInstance().getEventMenuRight().logout();
+
+                    PublicEvent.getInstance().getEventMain().destroyChat();
+                    PublicEvent.getInstance().getEventMain().showLogin(true);
+                    PublicEvent.getInstance().getEventMain().showLoading(false);
+                } catch (InterruptedException e) {
+                }
+
+            }
+        }).start();
     }
 
     private void eventLogout() {
-         ImageIcon icon = new ImageIcon("src/Icons/logout.png");
-        int chooser = JOptionPane.showConfirmDialog(this, 
-                "Are you sure want to \"Log out\"? ", "Log out!", 
-                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,icon);
-        if(chooser == 0){
+        ImageIcon icon = new ImageIcon("src/Icons/logout.png");
+        int chooser = JOptionPane.showConfirmDialog(this,
+                "Are you sure want to \"Log out\"? ", "Log out!",
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, icon);
+        if (chooser == 0) {
             //Yes
-            PublicEvent.getInstance().getEventMenuRight().logout();
+            eventSendRequestLogOut();
         }
     }
 
@@ -88,6 +89,7 @@ public class Menu_Right extends javax.swing.JPanel {
         User_Avatar = new swing.ImageAvatar();
         txt_Username = new javax.swing.JLabel();
         btn_Logout = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(249, 249, 249));
 
@@ -114,16 +116,28 @@ public class Menu_Right extends javax.swing.JPanel {
             }
         });
 
+        jButton1.setText("New Group");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(User_Avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(52, Short.MAX_VALUE))
             .addComponent(txt_Username, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btn_Logout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(User_Avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addComponent(jButton1)))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,7 +145,9 @@ public class Menu_Right extends javax.swing.JPanel {
                 .addComponent(User_Avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txt_Username)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 504, Short.MAX_VALUE)
+                .addGap(79, 79, 79)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 400, Short.MAX_VALUE)
                 .addComponent(btn_Logout)
                 .addContainerGap())
         );
@@ -153,10 +169,15 @@ public class Menu_Right extends javax.swing.JPanel {
         eventLogout();
     }//GEN-LAST:event_btn_LogoutMouseClicked
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new CreateGroupChat().setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private swing.ImageAvatar User_Avatar;
     private javax.swing.JLabel btn_Logout;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel txt_Username;
     // End of variables declaration//GEN-END:variables
 }

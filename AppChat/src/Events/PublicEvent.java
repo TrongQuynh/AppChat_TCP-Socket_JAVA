@@ -9,6 +9,7 @@ public class PublicEvent {
     private EventLogin eventLogin;
     private EventMenuLeft eventMenuLeft;
     private EventMenuRight eventMenuRight;
+    private EventCreateGroupChat eventCreateGroupChat;
 
     public static PublicEvent getInstance() {
         if (instance == null) {
@@ -68,4 +69,14 @@ public class PublicEvent {
     public EventMenuRight getEventMenuRight() {
         return this.eventMenuRight;
     }
+
+    public EventCreateGroupChat getEventCreateGroupChat() {
+        return eventCreateGroupChat;
+    }
+
+    public void addEventCreateGroupChat(EventCreateGroupChat eventCreateGroupChat) {
+        this.eventCreateGroupChat = eventCreateGroupChat;
+    }
+    
+    
 }

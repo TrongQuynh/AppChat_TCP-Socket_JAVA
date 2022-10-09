@@ -36,10 +36,6 @@ public class ClientSocket {
         return this.client;
     }
 
-    public static ClientSocket getClientSocket() {
-        return clientSocket;
-    }
-
     public static void setClientSocket(ClientSocket clientSocket) {
         ClientSocket.clientSocket = clientSocket;
     }
