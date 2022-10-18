@@ -3,6 +3,7 @@ package Components;
 import Class.Account;
 import Class.GroupChat;
 import Events.PublicEvent;
+import form.VideoCall;
 import swing.JIMSendTextPane;
 import swing.ScrollBar;
 import java.awt.Color;
@@ -13,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -117,23 +119,35 @@ public class Chat_Bottom extends javax.swing.JPanel {
                 btnMore.setIcon(new ImageIcon(new File("src/Icons/more_disable.png").getAbsolutePath()));
                 try {
                     eventChooserFile();
-//                if (panelMore.isVisible()) {
-//                    btnMore.setIcon(new ImageIcon(new File("src/Icons/more_disable.png").getAbsolutePath()));
-//                    panelMore.setVisible(false);
-//                    mig.setComponentConstraints(panelMore, "dock south,h 0!");
-//                    revalidate();
-//                } else {
-//                    btnMore.setIcon(new ImageIcon(new File("src/Icons/more.png").getAbsolutePath()));
-//                    panelMore.setVisible(true);
-//                    mig.setComponentConstraints(panelMore, "dock south,h 170!");
-//                    revalidate();
-//                }
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Chat_Bottom.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
 
+        /*
+            init btn video call
+         */
+        JButton btnCallVideo = new JButton();
+        btnCallVideo.setBorder(null);
+        btnCallVideo.setContentAreaFilled(false);
+        btnCallVideo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCallVideo.setIcon(new ImageIcon(new File("src/Icons/callVideo.png").getAbsolutePath()));
+        btnCallVideo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                try {
+                    if(account != null){
+                        VideoCall call = new VideoCall();
+                        call.setVisible(true);
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(Chat_Bottom.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+
+        panel.add(btnCallVideo);
         panel.add(btnMore);
         panel.add(btnSend);
 

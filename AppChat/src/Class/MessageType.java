@@ -2,8 +2,7 @@ package Class;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import javax.imageio.ImageIO;
 
@@ -22,6 +21,7 @@ public class MessageType implements Serializable {
         5-Image
         6-File
         7-Object Group
+        8-Callvideo
      */
     private int messageType;
     private String messageText;
@@ -60,6 +60,7 @@ public class MessageType implements Serializable {
      */
     private byte[] bytesPicture;
     private String formatFile;
+
     public MessageType(int messagetype, BufferedImage bufferedImages, String format) {
         try {
             this.messageType = messagetype;
@@ -76,6 +77,7 @@ public class MessageType implements Serializable {
     private byte[] fileContent;
     private String fileLengh;
     private String filename;
+
     public MessageType(int messagetype, String filename, String fileLengh, byte[] fileContent) {
         try {
             this.messageType = messagetype;
@@ -86,11 +88,21 @@ public class MessageType implements Serializable {
             e.printStackTrace();
         }
     }
-    
+
     //7 - Object Group
     public MessageType(int messageType, GroupChat groupChat) {
         this.messageType = messageType;
         this.groupChat = groupChat;
+    }
+
+    //8-Callvideo
+    private byte[] videoContent;
+
+    public MessageType(int messageType, BufferedImage bufferedImages) throws IOException {
+        this.messageType = messageType;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImages, "png", baos);
+        this.videoContent = baos.toByteArray();
     }
 
     public int getMessageType() {
@@ -180,5 +192,14 @@ public class MessageType implements Serializable {
     public void setGroupChat(GroupChat groupChat) {
         this.groupChat = groupChat;
     }
-    
+
+    public byte[] getVideoContent() {
+        return videoContent;
+    }
+
+    public void setVideoContent(byte[] videoContent) {
+        this.videoContent = videoContent;
+    }
+
+
 }

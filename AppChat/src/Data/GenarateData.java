@@ -4,14 +4,22 @@ import Class.Account;
 import Class.AccountList;
 import Class.GroupChat;
 import Class.GroupChatList;
+import java.io.File;
 
 public class GenarateData {
 
     public static void GenerateAccountList() {
         AccountList accountList = new AccountList();
         accountList.initFile();
-        accountList.addNewAccount(new Account(100, "abc@gmail.com", "admin", "123"));
-        accountList.addNewAccount(new Account(101, "abc1@gmail.com", "admin2", "123"));
+        Account acc1 = new Account(100, "abc@gmail.com", "Quynh", "123");
+        acc1.setAvartar(new File("src/Images/AccountImg.jpg").getAbsoluteFile());
+        accountList.addNewAccount(acc1);
+        
+        
+        Account acc2 = new Account(101, "abc1@gmail.com", "Anh", "123");
+        acc2.setAvartar(new File("src/Images/AccountImg.png").getAbsoluteFile());
+        accountList.addNewAccount(acc2);
+        
         accountList.addNewAccount(new Account(102, "abc2@gmail.com", "admin3", "123"));
 //        accountList.addNewAccount(new Account(103,"abc3@gmail.com","admin4", "123"));
 //        accountList.addNewAccount(new Account(104,"abc4@gmail.com","admin5", "123"));
@@ -82,9 +90,9 @@ public class GenarateData {
     }
 
     public static void main(String[] args) {
-//        GenerateAccountList();
+        GenerateAccountList();
 //            AppendNewAccountToFile();
-//            ReadDataAccountList();
+            ReadDataAccountList();
 GenerateGroupList();
         ReadDataGroupChatList();
 //        AppendNewGroupChatToFile();

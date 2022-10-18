@@ -95,6 +95,8 @@ public class Chat_Body extends javax.swing.JPanel {
                 BufferedImage bufferedImage = ImageIO.read(is);
 //                item.setImage(new ImageIcon(bufferedImage));
                 item.setPictureContent(fileName,bufferedImage, new ImageIcon(bufferedImage));
+            }else if (messType == 6) {
+                
             }
             item.setTime();
             body.add(item, "wrap, w 100::80%");

@@ -14,10 +14,12 @@ import DB.MessageDB;
 import Events.EventChat;
 import Events.PublicEvent;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import javax.swing.ImageIcon;
 import javax.imageio.ImageIO;
@@ -39,7 +41,7 @@ public class Chat extends javax.swing.JPanel {
     private void init() {
         setLayout(new MigLayout("fillx", "0[fill]0", "0[]0[100%, bottom]0[shrink 0]0"));
         chatTitle = new Chat_Title();
-        
+
         chatBody = new Chat_Body();
         chatBottom = new Chat_Bottom();
         messageDB = new MessageDB();
@@ -88,25 +90,49 @@ public class Chat extends javax.swing.JPanel {
                         if (chatTitle.getAccount().getID() == data.getSender().getID()) {
                             if (messageType == 1 || messageType == 5) {
                                 chatBody.addItemLeftWithProfile(data);
-                            } else {
+                            } else if (messageType == 6) {
                                 String fileLength = data.getMessage().getFileLengh();
                                 String fileName = data.getMessage().getFilename();
                                 String senderName = data.getSender().getUsername();
                                 byte[] fileContent = data.getMessage().getFileContent();
                                 chatBody.addItemFile("", senderName, fileName, fileLength, fileContent);
+                            } else if (messageType == 8) {
+                                String sender = data.getSender().getUsername();
+                                int chooser = JOptionPane.showConfirmDialog(null,
+                                        sender + " is calling to you ", "Download File",
+                                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                                        new ImageIcon("src/Icons/file.png")
+                                );
+                                if (chooser == 0) {
+                                    byte[] bytesPicture = data.getMessage().getVideoContent();
+                                    // convert byte[] to BufferedImage
+                                    InputStream is = new ByteArrayInputStream(bytesPicture);
+                                    BufferedImage bufferedImage = ImageIO.read(is);
+                                    VideoCall call = new VideoCall(data.getSender(), bufferedImage);
+                                    call.setVisible(true);
+                                }
                             }
                         }
                     } else if (currentAddressType == 2) {
                         int groupID = data.getGroupID();
                         if (groupID == chatTitle.getGroupChat().getGroupID()) {
-                            chatBody.addItemLeftWithProfile(data);
+                            if (messageType == 6) {
+                                String fileLength = data.getMessage().getFileLengh();
+                                String fileName = data.getMessage().getFilename();
+                                String senderName = data.getSender().getUsername();
+                                byte[] fileContent = data.getMessage().getFileContent();
+                                chatBody.addItemFile("", senderName, fileName, fileLength, fileContent);
+                            }else{
+                                chatBody.addItemLeftWithProfile(data);
+                            }
+                            
                         }
-                    } else if(currentAddressType == 3) {
+                    } else if (currentAddressType == 3) {
                         String boxName = chatTitle.getAllUser().getUsername();
-                        if(boxName.equals("Server")){
+                        if (boxName.equals("Server")) {
                             chatBody.addItemLeftWithProfile(data);
                         }
-                        
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -121,13 +147,11 @@ public class Chat extends javax.swing.JPanel {
                 if (isFileAPicture(file)) {
                     try {
                         // show message of sender
-                        
-
 
                         BufferedImage bufferedImage = ImageIO.read(file);
                         String format = getFileExtension(file);
                         String fileName = file.getName();
-                        
+
                         chatBody.addItemRight("", file);
                         System.out.println("SEND PICTURE -----------: " + fileName);
                         if (format == null) {
@@ -312,11 +336,13 @@ public class Chat extends javax.swing.JPanel {
     }
 
     public void setAlluser() {
-        if(chatTitle.getAllUser().getUsername().equals("Server")){
+        if (chatTitle.getAllUser().getUsername().equals("Server")) {
             return;
         }
-        chatTitle.setAllUser(new Account("Server"));
+        Account user = new Account("Server");
+        chatTitle.setAllUser(user);
         chatBody.clearChat();
+        chatBottom.setUser(user);
     }
 
     public void updateUser(Account account) {

@@ -2,6 +2,7 @@ package form;
 
 import Class.Account;
 import Events.PublicEvent;
+import javax.swing.JOptionPane;
 
 public class P_Register extends javax.swing.JPanel {
 
@@ -70,8 +71,16 @@ public class P_Register extends javax.swing.JPanel {
     }//GEN-LAST:event_cmdBackLoginActionPerformed
 
     private void cmdRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRegisterActionPerformed
-        Account account = new Account(this.txtEmail.getText(), this.txtUser.getText(), new String(this.txtPass.getPassword()));
-        PublicEvent.getInstance().getEventLogin().register(account);
+        String password = new String(this.txtPass.getPassword());
+
+        if ((this.txtEmail.getText()).isEmpty() || password.isEmpty() || (this.txtUser.getText()).isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Register Fail", "Register", JOptionPane.ERROR_MESSAGE);
+            return;
+        } else {
+            Account account = new Account(this.txtEmail.getText(), this.txtUser.getText(), password);
+            PublicEvent.getInstance().getEventLogin().register(account);
+        }
+
     }//GEN-LAST:event_cmdRegisterActionPerformed
 
 

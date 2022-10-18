@@ -143,12 +143,14 @@ public class CreateGroupChat extends javax.swing.JFrame {
         int numberUserInList = this.menuChooser.getUserInNewGroup().size();
         String groupName = this.txt_GroupName.getText();
         Set<Account> groupChat = this.menuChooser.getUserInNewGroup();
-        if (numberUserInList < 3 && groupName.isEmpty()) {
+        if (numberUserInList < 3 || groupName.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Error when create new group chat", "ERROR",
                     JOptionPane.OK_OPTION, new ImageIcon("src/Icons/group_selected.png"));
         } else {
             try {
                 GroupChat newGChat = new GroupChat(groupName, groupChat);
+                //add account create group chat into group
+                newGChat.addNewUser(ClientSocket.getInstanceClientSocket().getClient().getUserAccount());
                 MessageType mType = new MessageType(7, newGChat);
                 Message message = new Message(4, mType);
                 ClientSocket.getInstanceClientSocket().getClient().reqMessage = message;

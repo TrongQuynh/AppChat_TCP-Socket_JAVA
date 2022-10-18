@@ -2,6 +2,7 @@ package form;
 
 import Class.Account;
 import Events.PublicEvent;
+import javax.swing.JOptionPane;
 
 public class P_Login extends javax.swing.JPanel {
 
@@ -98,7 +99,13 @@ public class P_Login extends javax.swing.JPanel {
     private void cmdLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLoginActionPerformed
         String email = this.txtEmail.getText();
         String password = new String(this.txtPass.getPassword());
-        PublicEvent.getInstance().getEventLogin().login(new Account(email,password));
+        if(email.isEmpty() || password.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Login Fail", "Login", JOptionPane.ERROR_MESSAGE);
+            return;
+        }else{
+            PublicEvent.getInstance().getEventLogin().login(new Account(email,password));
+        }
+        
     }//GEN-LAST:event_cmdLoginActionPerformed
 
 

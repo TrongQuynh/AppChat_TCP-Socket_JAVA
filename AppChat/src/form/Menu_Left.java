@@ -73,6 +73,7 @@ public class Menu_Left extends javax.swing.JPanel {
             public void userDisconnect(int userID) {
                 for (Component com : menuList.getComponents()) {
                     Item_People acc = (Item_People) com;
+                    if(acc.getUser() == null) break;
                     if (acc.getUser().getID() == userID) {
                         acc.updateStatus(false);
                         break;
